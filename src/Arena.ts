@@ -9,7 +9,6 @@ class Arena {
     constructor() {
         this.currentId = 0;
         this.Players = new Map();
-        console.log('Welcome to the Magical Arena!\n');
     }
 
     isPresent(id: number): boolean {
@@ -22,15 +21,15 @@ class Arena {
 
     addPlayer(name: string, health: number, strength: number, attack: number): number {
         if (health <= 0) {
-            console.log("Health should be a positive integer.");
+            console.log("Error: Health should be a positive integer.");
             return -1;
         }
         if (strength <= 0) {
-            console.log("Strength should be a positive integer.");
+            console.log("Error: Strength should be a positive integer.");
             return -1;
         }
         if (attack <= 0) {
-            console.log("Attack should be a positive integer.");
+            console.log("Error: Attack should be a positive integer.");
             return -1;
         }
 
@@ -45,10 +44,9 @@ class Arena {
     deletePlayer(id: number): void {
         if (this.Players.has(id)) {
             const player = this.Players.get(id);
-            console.log(`${player?.name} has been defeated and removed...\n`);
             this.Players.delete(id);
         } else {
-            console.log(`No player with id = ${id} exists.\n`);
+            console.log(`Error: No player with id = ${id} exists.\n`);
         }
     }
 
@@ -63,19 +61,18 @@ class Arena {
 
     battle(id_first: number, id_second: number): any {
         if (id_first === id_second) {
-            console.log('Ids cannot be the same for both players.\n');
+            console.log('Error: Ids cannot be the same for both players.\n');
             return {};
         } else if (!this.Players.has(id_first)) {
-            console.log(`No player with id = ${id_first} exists.\n`);
+            console.log(`Error: No player with id = ${id_first} exists.\n`);
             return {};
         } else if (!this.Players.has(id_second)) {
-            console.log(`No player with id = ${id_second} exists.\n`);
+            console.log(`Error: No player with id = ${id_second} exists.\n`);
             return {};
         } else {
             let battleLogs= [];
             let attacker = this.Players.get(id_first);
             let defender = this.Players.get(id_second);
-            console.log(`\n____________${attacker?.name} vs ${defender?.name}____________\n`);
 
             if (defender.health < attacker.health) {
                 [attacker, defender] = [defender, attacker];
@@ -85,8 +82,6 @@ class Arena {
                 const attacking_power = attacker.attack * rollDice();
                 const defending_power = defender.strength * rollDice();
 
-                console.log(`${attacker?.name} hits ${defender?.name} with power = ${attacking_power}\n`);
-                console.log(`${defender?.name} defends with power = ${defending_power}\n`);
                 battleLogs.push(`${attacker?.name} hits ${defender?.name} with power = ${attacking_power}`);
                 battleLogs.push(`${defender?.name} defends with power = ${defending_power}`);
 
@@ -95,7 +90,6 @@ class Arena {
                     defender.health = Math.max(0, defender.health);
                 }
 
-                console.log(`${defender?.name}'s health: ${defender.health}\n`);
                 battleLogs.push(`${defender?.name}'s health: ${defender.health}`);
                 
                 if (defender.health > 0) {
@@ -103,7 +97,6 @@ class Arena {
                 }
             }
             
-            console.log(`${attacker?.name} has won!\n`);
             battleLogs.push(`${attacker?.name} has won!`);
             
             const res = { winner: attacker.id, loser: defender.id, battleLogs };
