@@ -3,11 +3,11 @@ import rollDice from "../utils/DieRoll";
 import Player from "./Player";
 
 class Arena {
-    total_players: number;
-    private Players: Map<number, Player>;
+    currentId: number;
+    Players: Map<number, Player>;
     
     constructor() {
-        this.total_players = 0;
+        this.currentId = 0;
         this.Players = new Map();
         console.log('Welcome to the Magical Arena!\n');
     }
@@ -34,10 +34,10 @@ class Arena {
             return -1;
         }
 
-        const id = this.total_players;
+        const id = this.currentId;
         const newPlayer = new Player(id, name, health, strength, attack);
         this.Players.set(id, newPlayer);
-        this.total_players += 1;
+        this.currentId += 1;
 
         return id;
     }
@@ -72,6 +72,7 @@ class Arena {
             console.log(`No player with id = ${id_second} exists.\n`);
             return {};
         } else {
+            let battleLogs= [];
             let attacker = this.Players.get(id_first);
             let defender = this.Players.get(id_second);
             console.log(`\n____________${attacker?.name} vs ${defender?.name}____________\n`);
@@ -86,6 +87,8 @@ class Arena {
 
                 console.log(`${attacker?.name} hits ${defender?.name} with power = ${attacking_power}\n`);
                 console.log(`${defender?.name} defends with power = ${defending_power}\n`);
+                battleLogs.push(`${attacker?.name} hits ${defender?.name} with power = ${attacking_power}`);
+                battleLogs.push(`${defender?.name} defends with power = ${defending_power}`);
 
                 if (attacking_power > defending_power) {
                     defender.health -= (attacking_power - defending_power);
@@ -93,14 +96,17 @@ class Arena {
                 }
 
                 console.log(`${defender?.name}'s health: ${defender.health}\n`);
+                battleLogs.push(`${defender?.name}'s health: ${defender.health}`);
                 
                 if (defender.health > 0) {
                     [attacker, defender] = [defender, attacker];
                 }
             }
             
-            const res = { winner: attacker.id, loser: defender.id };
             console.log(`${attacker?.name} has won!\n`);
+            battleLogs.push(`${attacker?.name} has won!`);
+            
+            const res = { winner: attacker.id, loser: defender.id, battleLogs };
             this.deletePlayer(defender.id);
 
             return res;
