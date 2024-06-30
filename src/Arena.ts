@@ -1,5 +1,5 @@
 // @ts-nocheck
-import rollDice from "../utils/DieRoll";
+import rollDice from "./utils/DieRoll";
 import Player from "./Player";
 
 class Arena {
