@@ -1,5 +1,5 @@
 {
-  "name": "magical-arena-shashwat",
+  "name": "magical-arena-backend-shashwat",
   "version": "1.0.0",
   "description": "Magical Arena simulator game",
   "main": "src/server.ts",
